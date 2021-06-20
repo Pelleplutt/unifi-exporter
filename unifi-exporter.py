@@ -339,8 +339,9 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='UniFi Prometheus exporter')
     parser.add_argument('--port', dest='port', default=PORT, help='Port to listen to')
-
-    logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.DEBUG)
+ 
+    loglevel = os.environ.get('LOGLEVEL', 'INFO').upper()
+    logging.basicConfig(format='%(levelname)s - %(message)s', level=loglevel)
 
     args = parser.parse_args()
     port = int(args.port)
@@ -351,6 +352,6 @@ if __name__ == '__main__':
         while True:
             time.sleep(1)
     except KeyboardInterrupt:
-        print("Break")
+        logging.warning("Break")
 
 exit(0)

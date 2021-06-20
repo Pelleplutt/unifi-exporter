@@ -88,7 +88,7 @@ class UniFi(object):
 
     def set_error(self, r):
         if r.status_code != 200:
-            print("ERROR - Status Code: ", status_code)
+            logging.error("Status Code: ", status_code)
             return
         data = r.json()
         if 'meta' in data:

@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+
+import logging
 from .device import *
 
 class Site(object):
@@ -41,7 +43,7 @@ class Site(object):
             elif d['model'] == 'UHDIW':
                 ret.append(UHDIW.UHDIW(self, d))
             else:
-                print(f"Unknown device type/model: {d['type']}/{d['model']}")
+                logging.warning(f"Unknown device type/model: {d['type']}/{d['model']}")
 
         return ret
 
