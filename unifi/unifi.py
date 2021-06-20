@@ -42,16 +42,16 @@ class UniFi(object):
     def api_addr(self, endpoint):
         if self.is_udm:
             if endpoint == "login":
-                return self.addr + '/api/auth' + endpoint
+                return f'{self.addr}/api/auth/{endpoint}'
             elif endpoint == "status":
-                return self.addr + '/proxy/network/' + endpoint
+                return f'{self.addr}/proxy/network/{endpoint}'
             else:
-                return self.addr + '/proxy/network/api/' + endpoint
+                return f'{self.addr}/proxy/network/api/{endpoint}'
         else:
             if endpoint == "status":
-                return self.addr + '/' + endpoint
+                return f'{self.addr}/{endpoint}'
             else:
-                return self.addr + '/api/' + endpoint
+                return f'{self.addr}/api/{endpoint}'
 
 
     def clear_session(self):
@@ -82,7 +82,7 @@ class UniFi(object):
 
 
     def api_get(self, endpoint):
-        logging.debug('API GET ' + endpoint)
+        logging.debug(f'API GET {endpoint}')
         headers = {"Accept": "application/json", "Content-Type": "application/json"}
         try:
             r = self.session.get(self.api_addr(endpoint), headers=headers, verify=False, timeout=1)
@@ -116,7 +116,7 @@ class UniFi(object):
         # < Set-Cookie: unifises=k8U3umwhciVfp8e43evU95mwQI3eAxK3; Path=/; Secure; HttpOnly
         # < Set-Cookie: csrf_token=k8U3umwhciVfp8e43evU95mwQI3eAxK3; Path=/; Secure
         # { "data" : [ ] , "meta" : { "rc" : "ok"}}
-        logging.info('Login ' + self.addr)
+        logging.info(f'Login {self.addr} {self.username}')
         payload = { 'username': self.username, 'password': self.password }
         self.api_post('login', payload)
 
