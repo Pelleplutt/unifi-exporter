@@ -19,6 +19,13 @@ Unifi Controller Metrics Exporter for Prometheus
   python3 -m pip install --user --requirement ./requirements.txt
   ```
 
+unifi-exporter uses the following environment variables:
+- `API_URL`: port to use for the exporter, default `https://localhost:8443`
+- `API_USERNAME`: Controller username, default `ubnt`
+- `API_PASSWORD`: Controller password, default `ubnt`
+- `METRICS_PORT`: Bind port for http metrics endpoint, default `9108`
+- `LOGLEVEL`: Loglevel to use (see https://docs.python.org/3/library/logging.html#logging-levels), default `INFO`
+
 
 ### Metric Series
 |  metric                        |  type      |  description          |

@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 
-import argparse
 import logging
 import os
 import pprint
 from prometheus_client import start_http_server, Gauge
 from prometheus_client.core import GaugeMetricFamily, CounterMetricFamily, REGISTRY
-#from prometheus_client.core import StateSetMetricFamily, HistogramMetricFamily, UnknownMetricFamily, UntypedMetricFamily
 import time
 from unifi import unifi
 
@@ -337,14 +335,10 @@ class UnifiCollector(object):
 
 if __name__ == '__main__':
 
-    parser = argparse.ArgumentParser(description='UniFi Prometheus exporter')
-    parser.add_argument('--port', dest='port', default=PORT, help='Port to listen to')
- 
     loglevel = os.environ.get('LOGLEVEL', 'INFO').upper()
     logging.basicConfig(format='%(levelname)s - %(message)s', level=loglevel)
 
-    args = parser.parse_args()
-    port = int(args.port)
+    port = int(os.environ.get('METRICS_PORT', PORT))
 
     REGISTRY.register(UnifiCollector())
     start_http_server(port)
