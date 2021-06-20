@@ -5,7 +5,7 @@ import logging
 import os
 import pprint
 from prometheus_client import start_http_server, Gauge
-from prometheus_client.core import GaugeMetricFamily, CounterMetricFamily, SummaryMetricFamily, InfoMetricFamily, REGISTRY
+from prometheus_client.core import GaugeMetricFamily, CounterMetricFamily, REGISTRY
 #from prometheus_client.core import StateSetMetricFamily, HistogramMetricFamily, UnknownMetricFamily, UntypedMetricFamily
 import time
 from unifi import unifi
@@ -27,9 +27,6 @@ class UnifiCollector(object):
         if self.apiusername is None or self.apipassword is None:
             raise AssertionError('API/Username and API/Password is required in configuration')
 
-    '''
-        TODO: change to SummaryMetricFamily
-    '''
     def metrics_setup_device_info(self, metrics):
         metrics['device_info'] = GaugeMetricFamily('unifi_device_info', 'Device info', labels=[
                                                 'name',
@@ -59,7 +56,7 @@ class UnifiCollector(object):
                                                 #'uplink_up', 'uplink_type', 'uplink_full_duplex', 'uplink_speed',
                                                 #'uplink_num_port', 'uplink_port_idx', 'uplink_remote_port', 'uplink_ip', 'uplink_mac'
                                             ])
-        metrics['device_up']        = GaugeMetricFamily('unifi_device_up', 'Device up', labels=['name', 'hostname', 'ip_address', 'mac', 'type', 'model', 'device_id', 'serial'])
+        metrics['device_up']        = GaugeMetricFamily('unifi_device_up',        'Device up',   labels=['name', 'hostname', 'ip_address', 'mac', 'type', 'model', 'device_id', 'serial'])
         metrics['device_last_seen'] = GaugeMetricFamily('unifi_device_last_seen', 'Device info', labels=['name', 'hostname', 'ip_address', 'mac', 'type', 'model', 'device_id', 'serial'])
         metrics['device_uptime']    = GaugeMetricFamily('unifi_device_uptime',    'Device info', labels=['name', 'hostname', 'ip_address', 'mac', 'type', 'model', 'device_id', 'serial'])
 
