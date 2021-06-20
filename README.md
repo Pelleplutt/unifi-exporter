@@ -2,8 +2,6 @@
 # ==============
 Unifi Controller Metrics Exporter for Prometheus
 
-+ Based on the original work from [@Pelleplutt](https://github.com/Pelleplutt/unifi-exporter)
-
 + UniFi-Exporter was tested with Ubiquiti's **UniFi Controller**
   collecting metrics for 8 devices in total:
   - 1 _CloudKey Gen2+_
@@ -12,7 +10,6 @@ Unifi Controller Metrics Exporter for Prometheus
 
 + Device metrics are defined by their model names.
   Taking the In-wall Access Point for example: has device model **UHDIW**, see "./unifi/device/UHDIW.py"
-
 
 ### Installation
   Install requirements with pip
@@ -63,5 +60,3 @@ Unifi Controller Metrics Exporter for Prometheus
   cp ./unifi-exporter.service /etc/systemd/system/unifi-exporter.service
   systemctl enable --now unifi-exporter.service
   ```
-
-
