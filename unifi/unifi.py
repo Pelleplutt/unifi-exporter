@@ -42,7 +42,6 @@ class UniFi(object):
         if endpoint == "status":
             return self.addr + '/proxy/network/' + endpoint
         else:
-            #print(self.addr + '/proxy/network/api/' + endpoint)
             return self.addr + '/proxy/network/api/' + endpoint
 
     def clear_session(self):
@@ -59,13 +58,13 @@ class UniFi(object):
         logging.debug('API POST ' + endpoint)
         try:
             headers = {"Accept": "application/json", "Content-Type": "application/json"}
-            r = self.session.post(self.api_addr(endpoint), headers = headers, json = payload, verify=False, timeout = 1)
+            r = self.session.post(self.api_addr(endpoint), headers=headers, json=payload, verify=False, timeout=1)
             self.set_error(r)
             return self.api_process_response(r)
         except UniFiException as e:
             if endpoint != 'login' and e.apimsg is not None and e.apimsg == 'api.err.LoginRequired':
                 self.login()
-                r = self.session.post(self.api_addr(endpoint), headers = headers, json = payload, verify = False, timeout = 1)
+                r = self.session.post(self.api_addr(endpoint), headers=headers, json=payload, verify=False, timeout=1)
                 return self.api_process_response(r)
             else:
                 raise e
@@ -75,12 +74,12 @@ class UniFi(object):
         logging.debug('API GET ' + endpoint)
         headers = {"Accept": "application/json", "Content-Type": "application/json"}
         try:
-            r = self.session.get(self.api_addr(endpoint), headers = headers, verify = False, timeout = 1)
+            r = self.session.get(self.api_addr(endpoint), headers=headers, verify=False, timeout=1)
             return self.api_process_response(r)
         except UniFiException as e:
             if e.apimsg is not None and e.apimsg == 'api.err.LoginRequired':
                 self.login()
-                r = self.session.get(self.api_addr(endpoint), headers = headers, verify = False, timeout = 1)
+                r = self.session.get(self.api_addr(endpoint), headers=headers, verify=False, timeout=1)
                 return self.api_process_response(r)
             else:
                 raise e
