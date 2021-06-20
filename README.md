@@ -69,3 +69,9 @@ unifi-exporter uses the following environment variables:
   cp ./unifi-exporter.service /etc/systemd/system/unifi-exporter.service
   systemctl enable --now unifi-exporter.service
   ```
+### Docker
+```
+docker run --restart unless-stopped \
+ --env API_URL=192.168.1.3:8443 \
+ --name unifi-exporter
+ ```
