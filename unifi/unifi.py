@@ -23,6 +23,7 @@ class UniFiLoginRequiredException(UniFiException):
     pass
 
 class UniFi(object):
+    api_headers = {"Accept": "application/json", "Content-Type": "application/json"}
     def __init__(self, username, password, controller_addr=None, udm_addr=None):
         self.username = username
         self.password = password
@@ -90,32 +91,26 @@ class UniFi(object):
     def api_post(self, endpoint, payload):
         logging.debug(f'API POST {self.api_addr(endpoint)}')
         try:
-            headers = {"Accept": "application/json", "Content-Type": "application/json"}
-            r = self.session.post(self.api_addr(endpoint), headers=headers, json=payload, verify=False, timeout=1)
+            r = self.session.post(self.api_addr(endpoint), headers=self.api_headers, json=payload, verify=False, timeout=1)
             return self.api_process_response(r)
         except UniFiLoginRequiredException as e:
             if endpoint != 'login':
                 self.login()
-                r = self.session.post(self.api_addr(endpoint), headers=headers, json=payload, verify=False, timeout=1)
+                r = self.session.post(self.api_addr(endpoint), headers=self.api_headers, json=payload, verify=False, timeout=1)
                 return self.api_process_response(r)
             else:
                 raise e
-        except UniFiException as e:
-            raise e
 
 
     def api_get(self, endpoint):
         logging.debug(f'API GET {endpoint}')
-        headers = {"Accept": "application/json", "Content-Type": "application/json"}
         try:
-            r = self.session.get(self.api_addr(endpoint), headers=headers, verify=False, timeout=1)
+            r = self.session.get(self.api_addr(endpoint), headers=self.api_headers, verify=False, timeout=1)
             return self.api_process_response(r)
         except UniFiLoginRequiredException as e:
             self.login()
-            r = self.session.get(self.api_addr(endpoint), headers=headers, verify=False, timeout=1)
+            r = self.session.get(self.api_addr(endpoint), headers=self.api_headers, verify=False, timeout=1)
             return self.api_process_response(r)
-        except UniFiException as e:
-            raise e
 
 
     def set_error(self, r):

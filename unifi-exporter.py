@@ -100,22 +100,6 @@ class UnifiCollector(object):
         metrics['g_mem_buffer']         = GaugeMetricFamily('unifi_mem_buffer',      'Memory buffers',labels=['name', 'hostname', 'ip_address', 'mac', 'type', 'model', 'device_id', 'serial'])
         metrics['g_general_temperature']= GaugeMetricFamily('unifi_general_temperature',      'General temperature',labels=['name', 'hostname', 'ip_address', 'mac', 'type', 'model', 'device_id', 'serial'])
 
-
-    '''
-        labels=[
-            'name',
-            'hostname',
-            'ip_address', 'mac',
-            'type', 'model',
-            'device_id', 'serial',
-            'version', 'upgradable',
-            'adopted', 'architecture',
-            'cfgversion', 'kernel_version',
-            'board_rev', 'provisioned_at',
-            'last_seen', 'connected_at',
-            'uptime'
-            ]
-    '''
     def add_metric_device_info(self, dev, metrics):
         labels = [dev.name,
                   dev.hostname,
