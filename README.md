@@ -74,4 +74,6 @@ unifi-exporter uses the following environment variables:
 docker run --restart unless-stopped \
  --env API_URL=192.168.1.3:8443 \
  --name unifi-exporter
+ --publish 9108:9108
+ --detach
  ```
