@@ -21,5 +21,3 @@ class UHDIW(device.Device):
     def parse_vap_table(self, data):
         for vap in data:
             self.vap.append(vap)
-
-

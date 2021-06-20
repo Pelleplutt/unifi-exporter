@@ -15,5 +15,3 @@ class USMINI(device.Device):
     def parse_port_table(self, data):
         for port in data:
             self.port[port['port_idx']] = port
-
-
