@@ -28,6 +28,7 @@ class UniFi(object):
         self.password = password
         self.cookies = {}
         self.session = requests.Session()
+        self.is_udm = False
         self.login()
 
         requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
@@ -39,12 +40,19 @@ class UniFi(object):
         (https://ubntwiki.com/products/software/unifi-controller/api)
     '''
     def api_addr(self, endpoint):
-        if endpoint == "login":
-            return self.addr + '/api/auth/' + endpoint
-        if endpoint == "status":
-            return self.addr + '/proxy/network/' + endpoint
+        if self.is_udm:
+            if endpoint == "login":
+                return self.addr + '/api/auth' + endpoint
+            elif endpoint == "status":
+                return self.addr + '/proxy/network/' + endpoint
+            else:
+                return self.addr + '/proxy/network/api/' + endpoint
         else:
-            return self.addr + '/proxy/network/api/' + endpoint
+            if endpoint == "status":
+                return self.addr + '/' + endpoint
+            else:
+                return self.addr + '/api/' + endpoint
+
 
     def clear_session(self):
         self.session.cookies.clear()
