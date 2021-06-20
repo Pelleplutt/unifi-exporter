@@ -18,6 +18,8 @@ class UniFiException(Exception):
         super(UniFiException, self).__init__(m)
 
         self.apimsg = apimsg
+class UniFiLoginRequiredException(UniFiException):
+    pass
 
 class UniFi(object):
     def __init__(self, addr, username, password):
@@ -55,19 +57,20 @@ class UniFi(object):
         return data
 
     def api_post(self, endpoint, payload):
-        logging.debug('API POST ' + endpoint)
+        logging.debug(f'API POST {self.api_addr(endpoint)}')
         try:
             headers = {"Accept": "application/json", "Content-Type": "application/json"}
             r = self.session.post(self.api_addr(endpoint), headers=headers, json=payload, verify=False, timeout=1)
-            self.set_error(r)
             return self.api_process_response(r)
-        except UniFiException as e:
-            if endpoint != 'login' and e.apimsg is not None and e.apimsg == 'api.err.LoginRequired':
+        except UniFiLoginRequiredException as e:
+            if endpoint != 'login':
                 self.login()
                 r = self.session.post(self.api_addr(endpoint), headers=headers, json=payload, verify=False, timeout=1)
                 return self.api_process_response(r)
             else:
                 raise e
+        except UniFiException as e:
+            raise e
 
 
     def api_get(self, endpoint):
@@ -76,20 +79,20 @@ class UniFi(object):
         try:
             r = self.session.get(self.api_addr(endpoint), headers=headers, verify=False, timeout=1)
             return self.api_process_response(r)
+        except UniFiLoginRequiredException as e:
+            self.login()
+            r = self.session.get(self.api_addr(endpoint), headers=headers, verify=False, timeout=1)
+            return self.api_process_response(r)
         except UniFiException as e:
-            if e.apimsg is not None and e.apimsg == 'api.err.LoginRequired':
-                self.login()
-                r = self.session.get(self.api_addr(endpoint), headers=headers, verify=False, timeout=1)
-                return self.api_process_response(r)
-            else:
-                raise e
-
+            raise e
 
 
     def set_error(self, r):
-        if r.status_code != 200:
-            logging.error("Status Code: ", status_code)
-            return
+        if r.status_code == 401:
+            raise UniFiLoginRequiredException(f"HTTP Status Code: {r.status_code}")
+        elif r.status_code != 200:
+            raise UniFiException(f"HTTP Status Code: {r.status_code}")
+
         data = r.json()
         if 'meta' in data:
             if data['meta']['rc'] == 'ok':
