@@ -40,7 +40,6 @@ for site in u.sites():
 
     print("DEVICES:")
     devices = u.api_get(site.api_endpoint('stat/device'))
-    #devices = site.u.api_get(site.api_endpoint('stat/device'))
     pprint.pprint(devices)
 
 print("STA:")
