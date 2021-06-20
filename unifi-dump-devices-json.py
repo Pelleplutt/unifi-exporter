@@ -8,7 +8,7 @@ u = unifi.UniFi.new_from_environment()
 # print controller status
 status = u.api_get('status')
 if status.get('meta').get('rc') != 'ok':
-    print("CONTROLLER STATUS: ", status.get('meta').get('rc'))
+    print(f"CONTROLLER STATUS: {status.get('meta').get('rc')}")
 
 sites = u.api_get('self/sites')
 if 'data' in sites:

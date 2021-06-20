@@ -7,18 +7,16 @@ u = unifi.UniFi.new_from_environment()
 
 # print controller status
 status = u.api_get('status')
-print("CONTROLLER STATUS: ", status.get('meta').get('rc'))
-print()
+print(f"CONTROLLER STATUS: {status.get('meta').get('rc')}\n")
 
 sites = u.api_get('self/sites')
 if 'data' in sites:
     print("SITES:")
     for s in sites.get('data'):
-        print('\t', s.get('desc'), s.get('name'), s.get('_id'))
-        print()
+        print(f"\t {s.get('desc')}, {s.get('name')}, {s.get('_id')}\n")
 
 for site in u.sites():
-    print('SITE: ' + site.name)
+    print(f"SITE: {site.name}")
 
     print("DEVICES:")
     devices = u.api_get(site.api_endpoint('stat/device'))

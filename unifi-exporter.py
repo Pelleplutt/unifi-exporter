@@ -286,7 +286,7 @@ class UnifiCollector(object):
         self.metrics_setup_sysstat(metrics)
 
         for site in self.unifi.sites():
-            logging.debug('SITE: ' + site.name)
+            logging.debug(f"SITE: {site.name}")
             for dev in site.device():
                 if dev.model in ('U7PG2', 'U7HD', 'U7NHD', 'U7LT', 'UHDIW'):
                     self.add_metric_device_info(dev, metrics)
@@ -299,7 +299,7 @@ class UnifiCollector(object):
                 elif dev.model == 'UGW3':
                     self.add_metric_ugw3(dev, metrics)
                 else:
-                    logging.warning('Cannot collect stats for device of model ' + dev.model)
+                    logging.warning(f"Cannot collect stats for device of model {dev.model}")
                     continue
 
                 self.add_metric_common_uplink(dev, metrics)
