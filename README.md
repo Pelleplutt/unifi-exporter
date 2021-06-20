@@ -2,6 +2,8 @@
 # ==============
 Unifi Controller Metrics Exporter for Prometheus
 
++ Shoutout to @c0psrul3 for adding support for multiple device and extensions
+
 + UniFi-Exporter was tested with Ubiquiti's **UniFi Controller**
   collecting metrics for 8 devices in total:
   - 1 _CloudKey Gen2+_
