@@ -2,6 +2,7 @@
 
 import json
 import logging
+import os
 import pprint
 import requests
 from requests.packages.urllib3.exceptions import InsecureRequestWarning, SNIMissingWarning, InsecurePlatformWarning
@@ -22,18 +23,40 @@ class UniFiLoginRequiredException(UniFiException):
     pass
 
 class UniFi(object):
-    def __init__(self, addr, username, password):
-        self.addr = addr
+    def __init__(self, username, password, controller_addr=None, udm_addr=None):
         self.username = username
         self.password = password
         self.cookies = {}
         self.session = requests.Session()
         self.is_udm = False
+        if controller_addr:
+            self.is_udm = False
+            self.addr = controller_addr
+        else:
+            self.is_udm = True
+            self.addr = udm_addr
         self.login()
 
         requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
         requests.packages.urllib3.disable_warnings(SNIMissingWarning)
         requests.packages.urllib3.disable_warnings(InsecurePlatformWarning)
+
+    @classmethod
+    def new_from_environment(cls):
+        apiendpoint = os.environ.get('API_URL', 'https://localhost:8443')
+        apiisudm = int(os.environ.get('API_IS_UDM', 0))
+        apiusername = os.environ.get('API_USERNAME', 'ubnt')
+        apipassword = os.environ.get('API_PASSWORD', 'ubnt')
+
+        if apiendpoint is None:
+            raise AssertionError('API/URL is required in configuration')
+        if apiusername is None or apipassword is None:
+            raise AssertionError('API/Username and API/Password is required in configuration')
+
+        if apiisudm:
+            return cls(apiusername, apipassword, udm_addr=apiendpoint)
+        else:
+            return cls(apiusername, apipassword, controller_addr=apiendpoint)
 
     '''
     Unifi API endpoints are described in wiki:

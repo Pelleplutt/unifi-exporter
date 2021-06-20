@@ -21,6 +21,7 @@ Unifi Controller Metrics Exporter for Prometheus
 
 unifi-exporter uses the following environment variables:
 - `API_URL`: port to use for the exporter, default `https://localhost:8443`
+- `API_IS_UDM`: Set to 1 if API URL refers to an UDM, default `0`
 - `API_USERNAME`: Controller username, default `ubnt`
 - `API_PASSWORD`: Controller password, default `ubnt`
 - `METRICS_PORT`: Bind port for http metrics endpoint, default `9108`

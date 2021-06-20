@@ -2,7 +2,6 @@
 
 import logging
 import os
-import pprint
 from prometheus_client import start_http_server, Gauge
 from prometheus_client.core import GaugeMetricFamily, CounterMetricFamily, REGISTRY
 import time
@@ -12,18 +11,7 @@ PORT = 9108
 
 class UnifiCollector(object):
     def __init__(self):
-        self.apiendpoint = os.environ.get('API_URL', 'https://localhost:8443')
-        self.apiusername = os.environ.get('API_USERNAME', 'ubnt')
-        self.apipassword = os.environ.get('API_PASSWORD', 'ubnt')
-        self.checkconfig()
-
-        self.unifi = unifi.UniFi(self.apiendpoint, self.apiusername, self.apipassword)
-
-    def checkconfig(self):
-        if self.apiendpoint is None:
-            raise AssertionError('API/URL is required in configuration')
-        if self.apiusername is None or self.apipassword is None:
-            raise AssertionError('API/Username and API/Password is required in configuration')
+        self.unifi = unifi.UniFi.new_from_environment()
 
     def metrics_setup_device_info(self, metrics):
         metrics['device_info'] = GaugeMetricFamily('unifi_device_info', 'Device info', labels=[
@@ -287,7 +275,7 @@ class UnifiCollector(object):
 
 
     def collect(self):
-        logging.info('Collect ' + self.apiendpoint)
+        logging.info('Collect')
         metrics = {}
 
         self.metrics_setup_device_info(metrics)
