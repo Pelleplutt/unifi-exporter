@@ -9,18 +9,20 @@ class UGW3(device.Device):
         self.networks = {}
         self.ports = {}
         self.parse_network_table(data['network_table'])
-        self.parse_ports_table(data['port_table'])
-        self.parse_stat(data['stat'])
-        self.parse_sysstat(data['sys_stats'])
-        self.parse_uplink(data['uplink'])
+        self.parse_port_table(data.get('port_table'))
+        self.parse_stat(data.get('stat'))
+        self.parse_sysstat(data.get('sys_stats'))
+        self.parse_uplink(data.get('uplink'))
 
     def parse_network_table(self, data):
-        for network in data:
-            self.networks[network['name']] = network
-    
-    def parse_ports_table(self, data):
-        for port in data:
-            self.ports[port['name']] = port
+        if data is not None:
+            for network in data:
+                self.networks[network['name']] = network
+
+    def parse_port_table(self, data):
+        if data is not None:
+            for port in data:
+                self.ports[port['name']] = port
 
 # {'_id': '5c6aed452372c365f028d988',
 #  '_uptime': 6514,
