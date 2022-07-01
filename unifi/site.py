@@ -22,6 +22,8 @@ class Site(object):
         for d in data['data']:
             if d['model'] == 'UGW3':
                 ret.append(UGW3.UGW3(self, d))
+            elif d['model'] in ('UDMPRO', 'UDMPROSE'):
+                ret.append(UDMPRO.UDMPRO(self, d))
             elif d['model'] == 'US8P150':
                 ret.append(US8P150.US8P150(self, d))
             elif d['model'] == 'USL16LP':

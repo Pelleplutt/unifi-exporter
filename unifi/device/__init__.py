@@ -5,6 +5,7 @@ from . import U7HD
 from . import U7NHD
 from . import U7PG2
 from . import UGW3
+from . import UDMPRO
 from . import UHDIW
 from . import USL16LP
 from . import USL8LP

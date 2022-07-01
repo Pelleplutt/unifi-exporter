@@ -208,6 +208,21 @@ class UnifiCollector(object):
                 metrics['c_port_tx_packets'].add_metric(labels, int(port.get('tx_packets')))
                 metrics['c_port_tx_dropped'].add_metric(labels, int(port.get('tx_dropped')))
 
+    def add_metric_udm(self, dev, metrics):
+        for idx, port in dev.ports.items():
+            labels = [ port.get('name'), dev.mac, dev.name, dev.model ]
+
+            if port.get('rx_bytes') is not None:
+                metrics['c_port_rx_bytes'].add_metric(labels,   int(port.get('rx_bytes')))
+                metrics['c_port_rx_errors'].add_metric(labels,  int(port.get('rx_errors')))
+                metrics['c_port_rx_packets'].add_metric(labels, int(port.get('rx_packets')))
+                metrics['c_port_rx_dropped'].add_metric(labels, int(port.get('rx_dropped')))
+
+            if port.get('tx_bytes') is not None:
+                metrics['c_port_tx_bytes'].add_metric(labels,   int(port.get('tx_bytes')))
+                metrics['c_port_tx_errors'].add_metric(labels,  int(port.get('tx_errors')))
+                metrics['c_port_tx_packets'].add_metric(labels, int(port.get('tx_packets')))
+                metrics['c_port_tx_dropped'].add_metric(labels, int(port.get('tx_dropped')))
 
     def add_metric_common_uplink(self, dev, metrics):
         if dev.uplink:
@@ -282,6 +297,8 @@ class UnifiCollector(object):
                     self.add_metric_us8(dev, metrics)
                 elif dev.model == 'UGW3':
                     self.add_metric_ugw3(dev, metrics)
+                elif dev.model in ('UDMPRO', 'UDMPROSE', 'UDM'):
+                    self.add_metric_udm(dev, metrics)
                 else:
                     logging.warning(f"Cannot collect stats for device of model {dev.model}")
                     continue
